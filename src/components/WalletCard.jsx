@@ -1,24 +1,40 @@
 // src/components/WalletCard.jsx
-import { useWallet } from '../hooks/useWallet'
+// ─────────────────────────────────────────────────────────────
+// This component is now PURELY for display.
+// It reads state and calls actions from the Zustand store.
+//
+// useWalletStore() is just like useStore() in Vue/Pinia — you
+// destructure exactly what you need from the store.
+//
+// The component itself has ZERO logic — no useState, no useEffect.
+// All logic lives in walletStore.js. Clean separation.
+// ─────────────────────────────────────────────────────────────
+
+import { useWalletStore } from '../store/walletStore'
 import './WalletCard.css'
 
 export default function WalletCard() {
-  const {
-    shortAddress,
-    address,
-    balance,
-    network,
-    status,
-    error,
-    connect,
-    disconnect,
-    isConnected,
-    isConnecting,
-  } = useWallet()
+
+  // Read everything we need from the global store.
+  // When any of these values change, this component re-renders.
+  const address         = useWalletStore(s => s.address)
+  const balance         = useWalletStore(s => s.balance)
+  const network         = useWalletStore(s => s.network)
+  const status          = useWalletStore(s => s.status)
+  const error           = useWalletStore(s => s.error)
+  const connect         = useWalletStore(s => s.connect)
+  const disconnect      = useWalletStore(s => s.disconnect)
+  const getShortAddress = useWalletStore(s => s.getShortAddress)
+
+  // Derived booleans — just for cleaner JSX below
+  const isConnected  = status === 'connected'
+  const isConnecting = status === 'connecting'
+
+  // Call the getter function from the store
+  const shortAddress = getShortAddress()
 
   return (
     <div className="wallet-wrapper">
-      {/* Background grid lines */}
       <div className="grid-bg" aria-hidden="true" />
 
       <div className="wallet-card">
@@ -31,13 +47,15 @@ export default function WalletCard() {
           </div>
           <div className={`status-badge status-${status}`}>
             <span className="status-dot" />
-            {status === 'connected' ? 'Live' : status === 'connecting' ? 'Connecting' : 'Offline'}
+            {status === 'connected'  ? 'Live'
+           : status === 'connecting' ? 'Connecting'
+           : 'Offline'}
           </div>
         </div>
 
-        {/* Main Content */}
         {!isConnected ? (
-          // ── DISCONNECTED STATE ──
+
+          // DISCONNECTED STATE
           <div className="disconnected-state">
             <div className="hero-icon">
               <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,27 +67,18 @@ export default function WalletCard() {
             <p className="hero-subtitle">
               Link MetaMask to view your address, balance, and network in real time.
             </p>
-
             {error && (
               <div className="error-box">
                 <span className="error-icon">!</span>
                 {error}
               </div>
             )}
-
-            <button
-              className="connect-btn"
-              onClick={connect}
-              disabled={isConnecting}
-            >
+            <button className="connect-btn" onClick={connect} disabled={isConnecting}>
               {isConnecting ? (
-                <>
-                  <span className="spinner" />
-                  Waiting for MetaMask...
-                </>
+                <><span className="spinner" />Waiting for MetaMask...</>
               ) : (
                 <>
-                  <svg className="metamask-icon" viewBox="0 0 35 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="metamask-icon" viewBox="0 0 35 33" fill="none">
                     <path d="M32.958 1L19.888 10.44l2.44-5.77L32.958 1z" fill="#E17726"/>
                     <path d="M2.042 1l12.95 9.54-2.32-5.87L2.042 1z" fill="#E27625"/>
                     <path d="M28.17 23.44l-3.48 5.33 7.45 2.05 2.14-7.27-6.11-.11zM.77 23.55l2.12 7.27 7.44-2.05-3.47-5.33-6.09.11z" fill="#E27625"/>
@@ -81,19 +90,17 @@ export default function WalletCard() {
               )}
             </button>
           </div>
-        ) : (
-          // ── CONNECTED STATE ──
-          <div className="connected-state">
 
-            {/* Network badge */}
+        ) : (
+
+          // CONNECTED STATE
+          <div className="connected-state">
             <div className="network-row">
               <span className="network-pill">
                 <span className="network-pulse" />
                 {network}
               </span>
             </div>
-
-            {/* Balance — the hero number */}
             <div className="balance-display">
               <span className="balance-label">ETH Balance</span>
               <div className="balance-amount">
@@ -101,17 +108,11 @@ export default function WalletCard() {
                 <span className="balance-unit">ETH</span>
               </div>
             </div>
-
-            {/* Address */}
             <div className="address-block">
               <span className="address-label">Wallet Address</span>
               <div className="address-row">
                 <span className="address-short">{shortAddress}</span>
-                <button
-                  className="copy-btn"
-                  onClick={() => navigator.clipboard.writeText(address)}
-                  title="Copy full address"
-                >
+                <button className="copy-btn" onClick={() => navigator.clipboard.writeText(address)} title="Copy full address">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <rect x="9" y="9" width="13" height="13" rx="2" />
                     <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
@@ -120,8 +121,6 @@ export default function WalletCard() {
               </div>
               <span className="address-full">{address}</span>
             </div>
-
-            {/* Stats row */}
             <div className="stats-row">
               <div className="stat">
                 <span className="stat-label">Chain</span>
@@ -138,7 +137,6 @@ export default function WalletCard() {
                 <span className="stat-value">ERC-20</span>
               </div>
             </div>
-
             <button className="disconnect-btn" onClick={disconnect}>
               Disconnect
             </button>
@@ -146,7 +144,6 @@ export default function WalletCard() {
         )}
       </div>
 
-      {/* Footer note */}
       <p className="footer-note">
         Week 1 · Web3 Wallet Dashboard · Ethers.js + MetaMask
       </p>
