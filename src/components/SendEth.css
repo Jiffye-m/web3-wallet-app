@@ -1,0 +1,382 @@
+/* src/components/SendEth.css */
+
+.send-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: cardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.1s;
+}
+
+/* ── Header ── */
+.send-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.send-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.send-icon {
+  font-size: 16px;
+  color: var(--accent);
+}
+
+.send-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.send-balance {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid rgba(63, 185, 80, 0.2);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* ── Body ── */
+.send-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Fields ── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.field-input {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.field-input::placeholder {
+  color: var(--text-muted);
+}
+
+.field-input:focus {
+  border-color: var(--accent);
+}
+
+.field-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Remove number input arrows */
+.field-input[type='number']::-webkit-inner-spin-button,
+.field-input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+/* ── Amount row ── */
+.amount-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.max-btn {
+  flex-shrink: 0;
+  padding: 12px 14px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.05em;
+}
+
+.max-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.max-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Error ── */
+.send-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(248, 81, 73, 0.08);
+  border: 1px solid rgba(248, 81, 73, 0.25);
+  color: var(--red);
+  font-size: 12px;
+  font-family: var(--font-sans);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  line-height: 1.5;
+}
+
+/* ── Status messages ── */
+.status-msg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.status-msg.confirming {
+  background: rgba(210, 153, 34, 0.08);
+  border: 1px solid rgba(210, 153, 34, 0.25);
+  color: var(--orange);
+}
+
+.status-msg.mining {
+  background: var(--accent-dim);
+  border: 1px solid rgba(88, 166, 255, 0.25);
+  color: var(--accent);
+}
+
+.status-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.status-spinner.white {
+  border-top-color: white;
+}
+
+/* ── Send Button ── */
+.send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.send-btn:hover:not(:disabled) {
+  background: #79b8ff;
+  box-shadow: 0 0 20px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.send-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.send-warning {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+/* ── Success State ── */
+.success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 12px 0;
+  animation: fadeUp 0.4s ease both;
+}
+
+.success-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+
+.success-title {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.success-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.etherscan-link {
+  display: inline-block;
+  padding: 8px 20px;
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  border-radius: 100px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  margin: 4px 0;
+}
+
+.etherscan-link:hover {
+  background: var(--green);
+  color: #000;
+}
+
+.tx-hash-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+.tx-hash-value {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-secondary);
+  word-break: break-all;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  width: 100%;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+/* ── Better error box ── */
+.send-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(248, 81, 73, 0.06);
+  border: 1px solid rgba(248, 81, 73, 0.3);
+  border-left: 3px solid var(--red);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  animation: fadeUp 0.2s ease both;
+}
+
+.error-icon-wrap {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  background: rgba(248, 81, 73, 0.15);
+  border: 1px solid rgba(248, 81, 73, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  font-family: var(--font-mono);
+  margin-top: 1px;
+}
+
+.error-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.error-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.error-body {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: #f0a0a0;
+  line-height: 1.5;
+}
+
+/* Input error state — red border when address is invalid */
+.input-error {
+  border-color: rgba(248, 81, 73, 0.5) !important;
+}
+
+.input-error:focus {
+  border-color: var(--red) !important;
+}
+
+/* Field hint */
+.field-hint {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-left: 6px;
+}

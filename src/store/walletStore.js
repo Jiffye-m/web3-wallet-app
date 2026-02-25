@@ -208,4 +208,28 @@ export const useWalletStore = create((set, get) => ({
   // Internal — not used by components
   _listeners: null,
 
+  // ── SEND ETH (Week 2 - App 1) ────────────────────────────
+  // toAddress: the recipient wallet address string
+  // ethAmount: ETH as a string e.g. "0.01"
+  // Returns the receipt object which contains the txHash
+  sendEth: async (toAddress, ethAmount) => {
+    const provider = new ethers.BrowserProvider(window.ethereum)
+    const signer   = await provider.getSigner()
+
+    // sendTransaction triggers MetaMask popup — user confirms here
+    const tx = await signer.sendTransaction({
+      to:    toAddress,
+      value: ethers.parseEther(ethAmount),
+    })
+
+    // tx.wait() pauses until the transaction is mined into a block
+    const receipt = await tx.wait()
+
+    // Refresh balance after sending — it will have decreased
+    await get().refreshBalance()
+
+    // Return receipt so UI can display the txHash
+    return receipt
+  },
+
 }))
