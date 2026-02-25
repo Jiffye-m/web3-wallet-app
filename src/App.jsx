@@ -1,11 +1,8 @@
 // src/App.jsx
-// We're building a dashboard layout.
-// Left column = WalletCard (connection + balance)
-// Right column = Week 2 apps (Send, History, Token Checker)
-// More components will be added here as we build them.
-
-import WalletCard from './components/WalletCard'
-import SendEth from './components/SendEth'
+import WalletCard    from './components/WalletCard'
+import SendEth       from './components/SendEth'
+import TxHistory     from './components/TxHistory'
+import TokenChecker  from './components/TokenChecker'
 import './App.css'
 
 export default function App() {
@@ -19,15 +16,16 @@ export default function App() {
       </header>
 
       <main className="app-main">
-        {/* Left column — wallet connection */}
+        {/* Left column — wallet stays sticky while you scroll right column */}
         <div className="col-left">
           <WalletCard />
         </div>
 
-        {/* Right column — Week 2 apps stack here */}
+        {/* Right column — all 3 Week 2 apps stacked */}
         <div className="col-right">
           <SendEth />
-          {/* TxHistory and TokenChecker will go here next */}
+          <TxHistory />
+          <TokenChecker />
         </div>
       </main>
     </div>
