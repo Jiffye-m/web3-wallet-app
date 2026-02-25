@@ -11,10 +11,11 @@ import './TxHistory.css'
 // Never store secrets without the VITE_ prefix check — but API keys
 // for public block explorers are fine to expose in frontend apps.
 const ETHERSCAN_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY
-console.log('API KEY:', ETHERSCAN_KEY)
 
+// V2 API — uses chainid=11155111 for Sepolia instead of a subdomain
+// Etherscan deprecated the old api-sepolia.etherscan.io/api endpoint
 const ETHERSCAN_API = (address) =>
-  `https://api-sepolia.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_KEY}`
+  `https://api.etherscan.io/v2/api?chainid=11155111&module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_KEY}`
 
 // Helper: convert Wei string to ETH
 const weiToEth = (wei) => parseFloat(ethers.formatEther(wei)).toFixed(6)
