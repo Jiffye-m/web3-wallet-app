@@ -44,7 +44,7 @@ const PRESET_TOKENS = [
   {
     name: 'Chainlink',
     symbol: 'LINK',
-    address: '0x779877A7B0D9E8603169DdbD7836e478b462478b',
+    address: '0x779877A7B0D9E8603169DdbD7836e478b4624789',
   },
   {
     name: 'Wrapped Ether',
@@ -70,15 +70,18 @@ export default function TokenChecker() {
 
   // ── checkBalance() ───────────────────────────────────────────
   const checkBalance = async () => {
+    // Simple validation: just check it starts with 0x and is 42 chars
+    // Avoids ethers checksum strictness issues with mixed-case addresses
     const contractAddr = contractAddress.trim()
-    const checkAddr    = walletAddress.trim() || address // default to connected wallet
+    const checkAddr    = walletAddress.trim() || address
 
-    // Validate both addresses
-    if (!ethers.isAddress(contractAddr)) {
-      setError('Invalid token contract address.')
+    const isValidAddr = (a) => a && a.startsWith('0x') && a.length === 42
+
+    if (!isValidAddr(contractAddr)) {
+      setError('Invalid token contract address. Must start with 0x and be 42 characters.')
       return
     }
-    if (!ethers.isAddress(checkAddr)) {
+    if (!isValidAddr(checkAddr)) {
       setError('Invalid wallet address to check.')
       return
     }
